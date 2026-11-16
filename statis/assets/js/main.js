@@ -11,19 +11,27 @@
         });
     }
 
-    /* ---------- Modal "Permintaan diterima" ---------- */
+    /* ---------- Modal "Permintaan diterima" (lalu otomatis ke WhatsApp) ---------- */
+    var NOMOR_WA = '6285217930056';   // ganti dengan nomor penjual (format 62...)
     var modal = document.getElementById('modal-sukses');
     var elemenSebelumnya = null;
+    var timerWa = null;
 
-    function bukaModal() {
+    function bukaModal(urlWa) {
         if (!modal) { return; }
         elemenSebelumnya = document.activeElement;
+        var tautan = modal.querySelector('[data-wa]');
+        tautan.href = urlWa;
         modal.hidden = false;
-        modal.querySelector('[data-tutup]').focus();
+        tautan.focus();
+        timerWa = setTimeout(function () { window.location.href = urlWa; }, 2500);
     }
 
     function tutupModal() {
         if (!modal || modal.hidden) { return; }
+        clearTimeout(timerWa);
+        var info = modal.querySelector('.modal-wa');
+        if (info) { info.remove(); }
         modal.hidden = true;
         if (elemenSebelumnya && elemenSebelumnya.focus) { elemenSebelumnya.focus(); }
     }
@@ -32,6 +40,22 @@
         modal.querySelector('[data-tutup]').addEventListener('click', tutupModal);
         modal.addEventListener('click', function (e) { if (e.target === modal) { tutupModal(); } });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { tutupModal(); } });
+    }
+
+    function susunPesan(f) {
+        var v = function (n) { return f.elements[n].value.trim(); };
+        var baris = [
+            'Halo Inkra, saya ingin minta penawaran sablon.',
+            '',
+            'Nama: ' + v('nama'),
+            'Email: ' + v('email'),
+            'Produk: ' + v('produk'),
+            'Jumlah: ' + v('jumlah')
+        ];
+        if (v('target')) { baris.push('Target selesai: ' + v('target')); }
+        if (v('rencana')) { baris.push('Rencana: ' + v('rencana').slice(0, 1000)); }
+        if (v('alamat')) { baris.push('Alamat: ' + v('alamat').slice(0, 500)); }
+        return baris.join('\n');
     }
 
     /* ---------- Form permintaan penawaran ---------- */
@@ -104,7 +128,8 @@
             inputPertamaSalah.focus();
             return;
         }
+        var urlWa = 'https://wa.me/' + NOMOR_WA + '?text=' + encodeURIComponent(susunPesan(form));
         form.reset();
-        bukaModal();
+        bukaModal(urlWa);
     });
 })();

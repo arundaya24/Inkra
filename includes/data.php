@@ -1,16 +1,19 @@
 <?php
+require_once __DIR__ . '/../config.php';
+$gambarMedia = pengaturan()['media'];
+
 $produk = [
-    ['nama' => 'Kaos',    'foto' => 'assets/img/kaos.jpg',    'ket' => 'Kaos sehari-hari, dengan desain khas Anda.'],
-    ['nama' => 'Jaket',   'foto' => 'assets/img/jaket.jpg',   'ket' => 'Tampil beda dengan sentuhan personal.'],
-    ['nama' => 'Totebag', 'foto' => 'assets/img/totebag.jpg', 'ket' => 'Bawa desain Anda ke mana saja.'],
+    ['nama' => 'Kaos',    'foto' => $gambarMedia['Kaos'],    'ket' => 'Kaos sehari-hari, dengan desain khas Anda.'],
+    ['nama' => 'Jaket',   'foto' => $gambarMedia['Jaket'],   'ket' => 'Tampil beda dengan sentuhan personal.'],
+    ['nama' => 'Totebag', 'foto' => $gambarMedia['Totebag'], 'ket' => 'Bawa desain Anda ke mana saja.'],
 ];
 
 $langkah = [
-    ['Ceritakan ide Anda',   'Bagikan desain, jenis produk, jumlah pesanan, dan target waktu yang Anda inginkan.'],
-    ['Diskusikan detailnya', 'Tentukan pilihan bahan, posisi sablon, warna, dan penawaran harga untuk pesanan Anda.'],
-    ['Wujudkan desainnya',   'Periksa dan setujui detail desain sebelum masuk ke proses sablon.'],
-    ['Sablon',               'Proses sablon dimulai sesuai dengan ide anda, bahan, posisi sablon, dan warna.'],
-    ['Pembayaran',           'Pemilihan metode pembayaran dan membayar sesuai dengan penawaran harga awal.'],
+    ['Isi formulir',          'Ceritakan ide Anda di halaman Minta Penawaran: jenis produk, jumlah, desain, dan target waktu yang Anda inginkan.'],
+    ['Kirim lewat WhatsApp',  'Setelah formulir dikirim, Anda otomatis diarahkan ke WhatsApp kami dengan pesan yang sudah terisi.'],
+    ['Diskusikan detailnya',  'Tentukan bahan, posisi sablon, warna, dan penawaran harga bersama kami lewat chat.'],
+    ['Sablon',                'Periksa dan setujui desain, lalu proses sablon dimulai sesuai ide, bahan, posisi sablon, dan warna.'],
+    ['Pembayaran',            'Bayar sesuai penawaran harga yang sudah disepakati di chat.'],
     ['Pengiriman (opsional)', 'Sablon sudah jadi dan akan dikirim ke alamatmu jika kamu memilih untuk dikirim.'],
 ];
 

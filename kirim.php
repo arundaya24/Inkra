@@ -23,6 +23,23 @@ function bersih(string $kunci, int $maks): string
     return mb_substr($nilai, 0, $maks);
 }
 
+// Susun teks pesan WhatsApp dari isi formulir.
+function pesan_wa(array $d): string
+{
+    $baris = [
+        'Halo Inkra, saya ingin minta penawaran sablon.',
+        '',
+        'Nama: ' . $d['nama'],
+        'Email: ' . $d['email'],
+        'Produk: ' . $d['produk'],
+        'Jumlah: ' . $d['jumlah'],
+    ];
+    if ($d['target'] !== '')  { $baris[] = 'Target selesai: ' . $d['target']; }
+    if ($d['rencana'] !== '') { $baris[] = 'Rencana: ' . mb_strimwidth($d['rencana'], 0, 1000, '…'); }
+    if ($d['alamat'] !== '')  { $baris[] = 'Alamat: ' . mb_strimwidth($d['alamat'], 0, 500, '…'); }
+    return implode("\n", $baris);
+}
+
 $data = [
     'nama'    => bersih('nama', 100),
     'email'   => bersih('email', 150),
@@ -93,5 +110,6 @@ if (EMAIL_ADMIN !== '') {
 
 $_SESSION['terakhir_kirim'] = time();
 $_SESSION['sukses'] = true;
+$_SESSION['wa_url'] = wa_link(pesan_wa($data));
 unset($_SESSION['old']);
 kembali($tujuan);

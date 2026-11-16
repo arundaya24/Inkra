@@ -1,0 +1,58 @@
+/* Dashboard admin. Memakai variabel warna dari style.css. */
+body.admin { min-height: 100vh; }
+
+/* Login */
+.login { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.login-kotak { width: min(400px, 100%); }
+.login-kotak .judul { margin: 28px 0 24px; }
+.form-admin { display: grid; gap: 16px; padding: 24px; background: var(--tinta); color: var(--krem); border-radius: 6px; }
+.form-admin :focus-visible { outline-color: var(--lime); }
+.login-balik { margin-top: 20px; }
+
+/* Field di dalam admin (bagian gelap & terang) */
+.admin .field label { font-size: 12px; font-weight: 500; }
+.form-admin .field input {
+    width: 100%; padding: 12px 14px; background: var(--field); border: 1px solid var(--field-garis);
+    border-radius: 4px; color: var(--krem); font-family: inherit; font-size: 13px;
+}
+.form-admin .field input:focus { outline: 2px solid var(--lime); outline-offset: 0; border-color: var(--lime); }
+.form-admin .btn-gelap { background: var(--lime); color: var(--tinta); }
+
+/* Pesan */
+.pesan { padding: 12px 14px; border-radius: 4px; font-size: 13px; font-weight: 500; }
+.pesan-ok { background: var(--lime); color: var(--tinta); }
+.pesan-galat { background: #f6d9d3; color: #6b1d10; }
+.form-admin .pesan-galat { background: transparent; color: #ffa99c; box-shadow: inset 0 0 0 1px #ff8a7a; }
+
+/* Bar atas */
+.admin-bar { background: var(--krem); border-bottom: 1px solid var(--garis); }
+.admin-bar-isi { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; }
+.admin-bar-aksi { display: flex; align-items: center; gap: 20px; }
+
+/* Isi */
+.admin-isi { display: grid; gap: 24px; padding-top: 40px; padding-bottom: 72px; }
+.panel { padding: 28px; background: #fff; border: 1px solid var(--garis); border-radius: 6px; }
+.panel h2 { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+.panel-ket { margin: 6px 0 22px; max-width: 60ch; font-size: 13px; color: var(--abu); }
+
+.admin input[type="file"], .admin input[type="tel"] {
+    width: 100%; padding: 10px 12px; background: var(--krem); border: 1px solid var(--garis);
+    border-radius: 4px; font-family: inherit; font-size: 13px; color: var(--tinta);
+}
+.form-unggah { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
+.form-unggah .field { display: grid; gap: 8px; flex: 1 1 240px; }
+.form-unggah-rapat { margin-top: 12px; }
+.btn-kecil { padding: 8px 12px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+.galeri { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin: 0 0 24px; padding: 0; list-style: none; }
+.galeri-item { display: grid; gap: 10px; align-content: start; }
+.galeri-item img, .media-item img { width: 100%; aspect-ratio: 6 / 5; object-fit: cover; border-radius: 6px; background: #ddd8cc; }
+
+.media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.media-item h3 { margin-top: 12px; font-size: 16px; font-weight: 600; }
+
+@media (max-width: 860px) {
+    .media-grid { grid-template-columns: 1fr; }
+    .panel { padding: 20px; }
+}

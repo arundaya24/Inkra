@@ -1,0 +1,14 @@
+# Folder gambar unggahan admin: jangan pernah menjalankan skrip di sini.
+<FilesMatch "(?i)\.(php|phtml|phar|php[0-9])$">
+    Require all denied
+</FilesMatch>
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+Options -Indexes

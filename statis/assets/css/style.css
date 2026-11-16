@@ -184,3 +184,9 @@ ol { padding: 0; list-style: none; }
 @media (max-width: 520px) {
     .baris { grid-template-columns: 1fr; }
 }
+
+/* ---------- Tombol tambahan (modal) ---------- */
+.btn-garis { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 1px currentColor; }
+.btn-garis:hover { filter: none; background: rgba(35, 36, 32, .08); }
+.modal-aksi { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.modal-kotak .modal-wa { margin: -12px auto 20px; font-size: 12px; font-weight: 500; }
