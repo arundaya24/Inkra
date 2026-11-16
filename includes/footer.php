@@ -13,7 +13,7 @@
                 <a class="btn-admin" href="admin/<?= admin_masuk() ? 'index.php' : 'login.php' ?>"><?= admin_masuk() ? 'Dashboard' : 'Admin' ?></a>
             </nav>
             <p class="footer-alamat"><?= e(ALAMAT) ?></p>
-            <p class="footer-alamat"><?= e(KONTAK_NAMA) ?> <?= e(telp_tampil()) ?></p>
+            <p class="footer-alamat"><?= e(nama_kontak()) ?> <?= e(telp_tampil()) ?></p>
         </div>
     </div>
 </footer>

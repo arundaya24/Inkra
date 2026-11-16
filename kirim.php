@@ -34,6 +34,7 @@ function pesan_wa(array $d): string
         'Produk: ' . $d['produk'],
         'Jumlah: ' . $d['jumlah'],
     ];
+    if ($d['telepon'] !== '') { $baris[] = 'Telepon: ' . $d['telepon']; }
     if ($d['target'] !== '')  { $baris[] = 'Target selesai: ' . $d['target']; }
     if ($d['rencana'] !== '') { $baris[] = 'Rencana: ' . mb_strimwidth($d['rencana'], 0, 1000, '…'); }
     if ($d['alamat'] !== '')  { $baris[] = 'Alamat: ' . mb_strimwidth($d['alamat'], 0, 500, '…'); }
@@ -43,6 +44,7 @@ function pesan_wa(array $d): string
 $data = [
     'nama'    => bersih('nama', 100),
     'email'   => bersih('email', 150),
+    'telepon' => bersih('telepon', 25),
     'produk'  => bersih('produk', 150),
     'jumlah'  => bersih('jumlah', 50),
     'target'  => bersih('target', 100),
@@ -72,6 +74,7 @@ if (!$errors) {
     if ($data['nama'] === '')   { $errors['nama']   = 'Nama wajib diisi.'; }
     if ($data['email'] === '')  { $errors['email']  = 'Email wajib diisi.'; }
     elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) { $errors['email'] = 'Format email belum benar.'; }
+    if ($data['telepon'] !== '' && normalisasi_telepon($data['telepon']) === null) { $errors['telepon'] = 'Nomor telepon tidak valid. Contoh: 0852-1793-0056.'; }
     if ($data['produk'] === '') { $errors['produk'] = 'Sebutkan produk yang ingin disablon.'; }
     if ($data['jumlah'] === '') { $errors['jumlah'] = 'Isi perkiraan jumlah.'; }
 }
@@ -84,7 +87,7 @@ if ($errors) {
 
 // Simpan satu baris JSON per permintaan ke data/permintaan.jsonl
 $baris = json_encode(
-    ['waktu' => date('c'), 'ip' => $_SERVER['REMOTE_ADDR'] ?? ''] + $data,
+    ['waktu' => date('c'), 'ip' => $_SERVER['REMOTE_ADDR'] ?? '', 'user_id' => $_SESSION['user_id'] ?? null] + $data,
     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
 );
 $tersimpan = @file_put_contents(__DIR__ . '/data/permintaan.jsonl', $baris . PHP_EOL, FILE_APPEND | LOCK_EX);

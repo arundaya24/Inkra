@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config.php';
 $halaman = $halaman ?? 'beranda';
+$akun    = pengguna();          // null = guest
 $judul   = $judul ?? 'Inkra — Sablon custom untuk ide hebat Anda';
 $menu = [
     'beranda'      => ['Beranda',      'index.php'],
@@ -31,6 +32,21 @@ $menu = [
                 <a href="<?= e($href) ?>"<?= $halaman === $kunci ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
             <?php endforeach; ?>
             <a class="btn btn-gelap" href="minta-penawaran.php">Minta Penawaran <?= ikon_panah() ?></a>
+            <div class="akun-nav">
+                <?php if (admin_masuk()): ?>
+                    <span class="akun-label">Admin</span>
+                    <a class="btn btn-tepi" href="admin/index.php">Dashboard</a>
+                <?php elseif ($akun): ?>
+                    <a class="akun-nama" href="profil.php"<?= $halaman === 'profil' ? ' aria-current="page"' : '' ?>><?= e(mb_strimwidth($akun['nama'], 0, 18, '…')) ?></a>
+                    <form class="akun-keluar" method="post" action="logout.php">
+                        <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+                        <button class="btn btn-tepi" type="submit">Keluar</button>
+                    </form>
+                <?php else: ?>
+                    <span class="akun-label">Guest</span>
+                    <a class="btn btn-tepi" href="login.php<?= $halaman === 'login' ? '' : '?next=' . rawurlencode(basename((string) ($_SERVER['SCRIPT_NAME'] ?? 'index.php'))) ?>">Login</a>
+                <?php endif; ?>
+            </div>
         </nav>
     </div>
 </header>

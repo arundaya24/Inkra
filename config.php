@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 const NAMA_SITUS  = 'Inkra';
 const TAGLINE     = 'Sablon custom untuk ide hebat Anda berikutnya.';
 const ALAMAT      = 'Komplek Cileungsi Indah, Cileungsi, Kec. Cileungsi, Bogor, Jawa Barat, Indonesia';
-const KONTAK_NAMA = 'Anggra';
+const KONTAK_NAMA = 'Anggra';             // nama bawaan; admin bisa menggantinya dari dashboard
 const EMAIL_ADMIN = '';                 // isi untuk menerima notifikasi email (opsional)
 
 // Akun dashboard admin. Ganti password ini sebelum situs dipasang online.
@@ -51,6 +51,7 @@ function flash(string $kunci, $default = null)
 function pengaturan_bawaan(): array
 {
     return [
+        'nama'     => KONTAK_NAMA,
         'telepon'  => '6285217930056',
         'carousel' => ['assets/img/hero.jpg'],
         'media'    => [
@@ -81,6 +82,12 @@ function pengaturan(bool $segarkan = false): array
     $data   = $mentah ? json_decode($mentah, true) : null;
 
     if (is_array($data)) {
+        if (isset($data['nama']) && is_string($data['nama'])) {
+            $nama = trim(preg_replace('/[^\P{C}]/u', '', $data['nama']) ?? '');
+            if ($nama !== '' && mb_strlen($nama) <= 60) {
+                $hasil['nama'] = $nama;
+            }
+        }
         if (isset($data['telepon']) && is_string($data['telepon']) && preg_match('/^\d{9,15}$/', $data['telepon'])) {
             $hasil['telepon'] = $data['telepon'];
         }
@@ -130,6 +137,12 @@ function normalisasi_telepon(string $masuk): ?string
         $d = '62' . $d;
     }
     return preg_match('/^\d{9,15}$/', $d) ? $d : null;
+}
+
+/** Nama kontak yang tampil di footer (bisa diubah admin). */
+function nama_kontak(): string
+{
+    return pengaturan()['nama'];
 }
 
 function nomor_wa(): string
@@ -193,3 +206,5 @@ function logo_ikon(): string
          . '<circle cx="12" cy="12" r="5.2" fill="#8a6aa8"/>'
          . '<g stroke="#232420" stroke-width="1.3" stroke-linecap="round">' . $garis . '</g></svg>';
 }
+
+require_once __DIR__ . '/includes/auth.php';

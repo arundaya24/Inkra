@@ -64,6 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['pesan'] = ['ok', 'Gambar ' . $nama . ' diperbarui.'];
                 break;
 
+            case 'nama':
+                $nama = trim(preg_replace('/[^\P{C}]/u', '', (string) ($_POST['nama'] ?? '')) ?? '');
+                if ($nama === '' || mb_strlen($nama) > 60) {
+                    throw new RuntimeException('Nama wajib diisi dan maksimal 60 karakter.');
+                }
+                $set['nama'] = $nama;
+                if (!simpan_pengaturan($set)) {
+                    throw new RuntimeException('Pengaturan tidak bisa disimpan. Periksa izin tulis folder data.');
+                }
+                $_SESSION['pesan'] = ['ok', 'Nama diperbarui menjadi ' . $nama . '.'];
+                break;
+
             case 'telepon':
                 $nomor = normalisasi_telepon((string) ($_POST['telepon'] ?? ''));
                 if ($nomor === null) {
@@ -98,6 +110,7 @@ admin_head('Dashboard admin');
     <div class="wrap admin-bar-isi">
         <a class="logo" href="index.php">Inkra<?= logo_ikon() ?></a>
         <div class="admin-bar-aksi">
+            <a class="tautan-garis" href="pengguna.php">Akun pengguna</a>
             <a class="tautan-garis" href="../index.php" target="_blank" rel="noopener">Lihat situs</a>
             <form method="post" action="logout.php">
                 <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
@@ -167,6 +180,21 @@ admin_head('Dashboard admin');
                 </div>
             <?php endforeach; ?>
         </div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-nama">
+        <h2 id="h-nama">Nama kontak</h2>
+        <p class="panel-ket">Nama yang tampil di footer, di samping nomor telepon (sebelumnya "Anggra"). Maksimal 60 karakter.</p>
+
+        <form class="form-unggah" method="post">
+            <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+            <input type="hidden" name="aksi" value="nama">
+            <div class="field">
+                <label for="nama-kontak">Nama</label>
+                <input id="nama-kontak" name="nama" type="text" maxlength="60" value="<?= e(nama_kontak()) ?>" required>
+            </div>
+            <button class="btn btn-gelap" type="submit">Simpan nama</button>
+        </form>
     </section>
 
     <section class="panel" aria-labelledby="h-telepon">

@@ -3,7 +3,9 @@ $errors = flash('errors', []);
 $old    = flash('old', []);
 $asal   = $asal ?? 'minta-penawaran';          // 'index' atau 'minta-penawaran'
 $h      = $asal === 'index' ? 'h2' : 'h1';
-$val    = fn(string $k): string => e($old[$k] ?? ($k === 'produk' ? (string) ($_GET['produk'] ?? '') : ''));
+$profil = user_masuk() ? profil_untuk_form() : [];   // data profil user yang login (kosong untuk guest)
+// Urutan: isian sebelumnya (jika validasi gagal) > profil user > parameter ?produk=
+$val    = fn(string $k): string => e($old[$k] ?? ($profil[$k] ?? ($k === 'produk' ? (string) ($_GET['produk'] ?? '') : '')));
 $err    = fn(string $k): string => isset($errors[$k]) ? '<p class="galat" id="err-' . $k . '">' . e($errors[$k]) . '</p>' : '';
 $aria   = fn(string $k): string => isset($errors[$k]) ? ' aria-invalid="true" aria-describedby="err-' . $k . '"' : '';
 ?>
@@ -43,6 +45,12 @@ $aria   = fn(string $k): string => isset($errors[$k]) ? ' aria-invalid="true" ar
             </div>
 
             <div class="field">
+                <label for="telepon">Nomor telepon (opsional)</label>
+                <input id="telepon" name="telepon" type="tel" inputmode="tel" maxlength="25" placeholder="0852-1793-0056" autocomplete="tel" value="<?= $val('telepon') ?>"<?= $aria('telepon') ?>>
+                <?= $err('telepon') ?>
+            </div>
+
+            <div class="field">
                 <label for="produk">Apa yang ingin Anda sablon?</label>
                 <input id="produk" name="produk" type="text" maxlength="150" placeholder="Kaos, jaket, totebag, atau produk lainnya" required value="<?= $val('produk') ?>"<?= $aria('produk') ?>>
                 <?= $err('produk') ?>
@@ -72,6 +80,11 @@ $aria   = fn(string $k): string => isset($errors[$k]) ? ' aria-invalid="true" ar
 
             <button class="btn btn-lime btn-blok" type="submit"><span>Minta Penawaran</span><?= ikon_panah() ?></button>
             <p class="form-catatan">Detail desain bisa dibahas saat konsultasi penawaran.</p>
+            <?php if (user_masuk()): ?>
+                <p class="form-catatan">Nama, email, telepon, dan alamat terisi dari <a class="tautan-garis" href="profil.php">profil Anda</a>. Boleh diubah untuk pesanan ini.</p>
+            <?php elseif (!admin_masuk()): ?>
+                <p class="form-catatan">Anda masuk sebagai guest. <a class="tautan-garis" href="login.php?next=<?= e(rawurlencode($asal === 'index' ? 'index.php' : 'minta-penawaran.php')) ?>">Login</a> agar data terisi otomatis.</p>
+            <?php endif; ?>
         </form>
     </div>
 </section>
