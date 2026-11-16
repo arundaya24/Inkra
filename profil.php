@@ -29,8 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['pesan_profil'] = ['ok', 'Profil diperbarui.'];
                 header('Location: profil.php');
                 exit;
+            } catch (DataSudahDipakai $ex) {
+                $errors = $ex->galat;
             } catch (RuntimeException $ex) {
-                $errors[str_contains($ex->getMessage(), 'Email') ? 'email' : '_umum'] = $ex->getMessage();
+                $errors['_umum'] = $ex->getMessage();
             }
         }
     } elseif ($aksi === 'password') {

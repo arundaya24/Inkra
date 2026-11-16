@@ -48,8 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['terakhir_daftar'] = time();
             header('Location: ' . ($next !== '' ? $next : 'profil.php'));
             exit;
+        } catch (DataSudahDipakai $ex) {
+            $errors = $ex->galat;
         } catch (RuntimeException $ex) {
-            $errors[str_contains($ex->getMessage(), 'Email') ? 'email' : '_umum'] = $ex->getMessage();
+            $errors['_umum'] = $ex->getMessage();
         }
     }
 }

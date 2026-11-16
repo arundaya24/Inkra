@@ -5,7 +5,7 @@
 - **PHP built-in server** (PHP 8.1+): `php -S localhost:8000` di dalam folder ini.
 
 ## Admin
-- Admin login lewat tombol **Login** di navbar (`/login.php`), atau tombol **Admin** di footer.
+- Admin login lewat tombol **Login** di navbar (`/login.php`). Tidak ada tombol admin di footer.
 - Username `admin`, password `admin123`. **Ganti sebelum situs dipasang online** (`ADMIN_USER` dan `ADMIN_PASS` di `config.php`).
 - Dashboard: ubah carousel beranda, gambar Kaos/Jaket/Totebag, dan nomor telepon admin.
 - Nomor telepon dipakai untuk footer, tombol Kontak Kami, dan tujuan pesan WhatsApp dari halaman Minta Penawaran.
@@ -16,6 +16,7 @@
 - Pengunjung yang belum login dihitung sebagai **Guest** (label di navbar kanan atas) dan tetap bisa mengirim permintaan penawaran.
 - Tombol **Login** ada di navbar kanan atas. Halaman `login.php` dipakai bersama oleh user (email + password) dan admin (username + password dari `config.php`). Admin langsung diarahkan ke dashboard.
 - `daftar.php`: pengunjung membuat akun (nama, email, telepon opsional, password minimal 8 karakter).
+- Nama, email, dan nomor telepon harus unik: tidak boleh sama dengan akun lain (nama dibandingkan tanpa membedakan huruf besar/kecil dan spasi ganda). Alamat boleh sama.
 - `profil.php`: user mengubah nama, email, telepon, alamat, dan password.
 - Saat user login, formulir **Minta Penawaran** terisi otomatis dari profil (nama, email, telepon, alamat) dan masih bisa diubah per pesanan.
 - Dashboard admin → **Akun pengguna** (`admin/pengguna.php`): admin hanya melihat nama, email, dan telepon. Alamat dan hash password tidak pernah dikirim ke halaman itu.

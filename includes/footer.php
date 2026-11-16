@@ -10,7 +10,6 @@
                 <a href="media-sablon.php">Produk Sablon</a>
                 <a href="cara-pesan.php">Cara Pesan</a>
                 <a href="minta-penawaran.php">Minta Penawaran</a>
-                <a class="btn-admin" href="admin/<?= admin_masuk() ? 'index.php' : 'login.php' ?>"><?= admin_masuk() ? 'Dashboard' : 'Admin' ?></a>
             </nav>
             <p class="footer-alamat"><?= e(ALAMAT) ?></p>
             <p class="footer-alamat"><?= e(nama_kontak()) ?> <?= e(telp_tampil()) ?></p>

@@ -1,8 +1,8 @@
 {
+    "nama": "Anggra",
     "telepon": "6285217930056",
     "carousel": [
-        "assets/img/hero.jpg",
-        "uploads/e7fdbb95c37f04b86411963953b557d8.webp"
+        "assets/img/hero.jpg"
     ],
     "media": {
         "Kaos": "assets/img/kaos.jpg",

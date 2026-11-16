@@ -9,6 +9,18 @@ declare(strict_types=1);
 
 const FILE_USERS = __DIR__ . '/../data/users.json';
 
+/** Dilempar saat nama/email/telepon sudah dipakai akun lain. $galat berisi pesan per field. */
+class DataSudahDipakai extends RuntimeException
+{
+    public array $galat;
+
+    public function __construct(array $galat)
+    {
+        parent::__construct(implode(' ', $galat));
+        $this->galat = $galat;
+    }
+}
+
 /* ---------- Penyimpanan ---------- */
 
 function users_baca(): array
@@ -62,6 +74,37 @@ function user_cari_email(array $users, string $email): ?array
         }
     }
     return null;
+}
+
+/** Samakan nama untuk perbandingan: huruf kecil dan spasi ganda dirapikan ("Budi  Santoso" = "budi santoso"). */
+function nama_kunci(string $nama): string
+{
+    return mb_strtolower(trim(preg_replace('/\s+/u', ' ', $nama) ?? ''));
+}
+
+/**
+ * Cari data profil yang sudah dipakai akun lain (nama, email, telepon).
+ * Alamat sengaja tidak dicek karena satu rumah bisa punya lebih dari satu akun.
+ * Mengembalikan [field => pesan galat]; kosong jika aman.
+ */
+function galat_duplikat(array $users, array $profil, ?string $kecualiId = null): array
+{
+    $g = [];
+    foreach ($users as $u) {
+        if ($kecualiId !== null && ($u['id'] ?? '') === $kecualiId) {
+            continue;
+        }
+        if (!isset($g['nama']) && nama_kunci((string) ($u['nama'] ?? '')) === nama_kunci($profil['nama'])) {
+            $g['nama'] = 'Nama ini sudah dipakai pengguna lain. Gunakan nama yang berbeda.';
+        }
+        if (!isset($g['email']) && mb_strtolower((string) ($u['email'] ?? '')) === mb_strtolower($profil['email'])) {
+            $g['email'] = 'Email ini sudah terdaftar.';
+        }
+        if (!isset($g['telepon']) && $profil['telepon'] !== '' && (string) ($u['telepon'] ?? '') === $profil['telepon']) {
+            $g['telepon'] = 'Nomor telepon ini sudah dipakai pengguna lain.';
+        }
+    }
+    return $g;
 }
 
 /* ---------- Sesi ---------- */
@@ -192,13 +235,13 @@ function telp_user_tampil(string $nomor): string
 
 /* ---------- Aksi ---------- */
 
-/** Buat akun baru. Melempar RuntimeException bila email sudah terdaftar. */
+/** Buat akun baru. Melempar DataSudahDipakai bila nama, email, atau telepon sudah dipakai. */
 function user_buat(array $profil, string $password): array
 {
     $hash = password_hash($password, PASSWORD_DEFAULT);
     return users_transaksi(function (array &$users) use ($profil, $hash): array {
-        if (user_cari_email($users, $profil['email']) !== null) {
-            throw new RuntimeException('Email ini sudah terdaftar. Silakan login.');
+        if ($g = galat_duplikat($users, $profil)) {
+            throw new DataSudahDipakai($g);
         }
         $baru = [
             'id'            => bin2hex(random_bytes(8)),
@@ -214,18 +257,18 @@ function user_buat(array $profil, string $password): array
     });
 }
 
-/** Perbarui profil user. Melempar RuntimeException bila email dipakai akun lain. */
+/** Perbarui profil user. Melempar DataSudahDipakai bila nama, email, atau telepon dipakai akun lain. */
 function user_perbarui(string $id, array $profil): void
 {
     users_transaksi(function (array &$users) use ($id, $profil): void {
         $ada = null;
         foreach ($users as $i => $u) {
-            if (mb_strtolower((string) $u['email']) === $profil['email'] && $u['id'] !== $id) {
-                throw new RuntimeException('Email ini sudah dipakai akun lain.');
-            }
             if ($u['id'] === $id) {
                 $ada = $i;
             }
+        }
+        if ($g = galat_duplikat($users, $profil, $id)) {
+            throw new DataSudahDipakai($g);
         }
         if ($ada === null) {
             throw new RuntimeException('Akun tidak ditemukan.');
