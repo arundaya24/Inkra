@@ -83,7 +83,7 @@ function nama_kunci(string $nama): string
 }
 
 /**
- * Cari data profil yang sudah dipakai akun lain (nama, email, telepon).
+ * Cari data profil yang sudah dipakai akun lain (username, nama, email, telepon).
  * Alamat sengaja tidak dicek karena satu rumah bisa punya lebih dari satu akun.
  * Mengembalikan [field => pesan galat]; kosong jika aman.
  */
@@ -93,6 +93,9 @@ function galat_duplikat(array $users, array $profil, ?string $kecualiId = null):
     foreach ($users as $u) {
         if ($kecualiId !== null && ($u['id'] ?? '') === $kecualiId) {
             continue;
+        }
+        if (!isset($g['username']) && ($u['username'] ?? '') !== '' && mb_strtolower((string) $u['username']) === $profil['username']) {
+            $g['username'] = 'Username ini sudah dipakai. Pilih username lain.';
         }
         if (!isset($g['nama']) && nama_kunci((string) ($u['nama'] ?? '')) === nama_kunci($profil['nama'])) {
             $g['nama'] = 'Nama ini sudah dipakai pengguna lain. Gunakan nama yang berbeda.';
@@ -105,6 +108,21 @@ function galat_duplikat(array $users, array $profil, ?string $kecualiId = null):
         }
     }
     return $g;
+}
+
+/** Cari akun untuk login: cocok dengan username atau email (tanpa membedakan huruf besar/kecil). */
+function user_cari_masuk(array $users, string $identitas): ?array
+{
+    $id = mb_strtolower(trim($identitas));
+    if ($id === '') {
+        return null;
+    }
+    foreach ($users as $u) {
+        if (mb_strtolower((string) ($u['username'] ?? '')) === $id || mb_strtolower((string) ($u['email'] ?? '')) === $id) {
+            return $u;
+        }
+    }
+    return null;
 }
 
 /* ---------- Sesi ---------- */
@@ -190,12 +208,21 @@ function galat_password(string $pass): ?string
 function validasi_profil(array $post): array
 {
     $d = [
+        'username' => mb_strtolower(bersih_teks((string) ($post['username'] ?? ''), 30)),
         'nama'    => bersih_teks((string) ($post['nama'] ?? ''), 100),
         'email'   => mb_strtolower(bersih_teks((string) ($post['email'] ?? ''), 150)),
         'telepon' => '',
         'alamat'  => bersih_teks((string) ($post['alamat'] ?? ''), 500),
     ];
     $g = [];
+
+    if ($d['username'] === '') {
+        $g['username'] = 'Username wajib diisi.';
+    } elseif (!preg_match('/^[a-z0-9_]{3,20}$/', $d['username'])) {
+        $g['username'] = 'Username 3–20 karakter: huruf kecil, angka, dan garis bawah (_).';
+    } elseif (mb_strtolower(ADMIN_USER) === $d['username']) {
+        $g['username'] = 'Username ini tidak tersedia.';
+    }
 
     if ($d['nama'] === '') {
         $g['nama'] = 'Nama wajib diisi.';
@@ -245,6 +272,7 @@ function user_buat(array $profil, string $password): array
         }
         $baru = [
             'id'            => bin2hex(random_bytes(8)),
+            'username'      => $profil['username'],
             'nama'          => $profil['nama'],
             'email'         => $profil['email'],
             'telepon'       => $profil['telepon'],
@@ -273,7 +301,7 @@ function user_perbarui(string $id, array $profil): void
         if ($ada === null) {
             throw new RuntimeException('Akun tidak ditemukan.');
         }
-        foreach (['nama', 'email', 'telepon', 'alamat'] as $k) {
+        foreach (['username', 'nama', 'email', 'telepon', 'alamat'] as $k) {
             $users[$ada][$k] = $profil[$k];
         }
     });
@@ -298,6 +326,7 @@ function profil_untuk_form(): array
 {
     $u = pengguna();
     return [
+        'username' => (string) ($u['username'] ?? ''),
         'nama'    => (string) ($u['nama'] ?? ''),
         'email'   => (string) ($u['email'] ?? ''),
         'telepon' => $u ? telp_user_tampil((string) $u['telepon']) : '',

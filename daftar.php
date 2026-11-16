@@ -14,7 +14,7 @@ if (user_masuk()) {
 }
 
 $errors = [];
-$old    = ['nama' => '', 'email' => '', 'telepon' => '', 'alamat' => ''];
+$old    = ['username' => '', 'nama' => '', 'email' => '', 'telepon' => '', 'alamat' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     [$data, $errors] = validasi_profil($_POST);
@@ -79,6 +79,11 @@ include __DIR__ . '/includes/header.php';
             <?php if (isset($errors['_umum'])): ?>
                 <p class="galat galat-umum" role="alert"><?= e($errors['_umum']) ?></p>
             <?php endif; ?>
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" maxlength="20" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="huruf kecil, angka, _" required value="<?= $val('username') ?>"<?= $aria('username') ?>>
+                <?= $err('username') ?>
+            </div>
             <div class="baris">
                 <div class="field">
                     <label for="nama">Nama</label>

@@ -14,9 +14,9 @@
 ## Akun pengguna (guest, user, admin)
 
 - Pengunjung yang belum login dihitung sebagai **Guest** (label di navbar kanan atas) dan tetap bisa mengirim permintaan penawaran.
-- Tombol **Login** ada di navbar kanan atas. Halaman `login.php` dipakai bersama oleh user (email + password) dan admin (username + password dari `config.php`). Admin langsung diarahkan ke dashboard.
-- `daftar.php`: pengunjung membuat akun (nama, email, telepon opsional, password minimal 8 karakter).
-- Nama, email, dan nomor telepon harus unik: tidak boleh sama dengan akun lain (nama dibandingkan tanpa membedakan huruf besar/kecil dan spasi ganda). Alamat boleh sama.
+- Tombol **Login** ada di navbar kanan atas. Halaman `login.php` dipakai bersama oleh user (username atau email + password) dan admin (username + password dari `config.php`). Admin langsung diarahkan ke dashboard.
+- `daftar.php`: pengunjung membuat akun (username, nama, email, telepon opsional, password minimal 8 karakter).
+- Username (3–20 karakter: huruf kecil, angka, `_`), nama, email, dan nomor telepon harus unik: tidak boleh sama dengan akun lain (nama dibandingkan tanpa membedakan huruf besar/kecil dan spasi ganda). Alamat boleh sama.
 - `profil.php`: user mengubah nama, email, telepon, alamat, dan password.
 - Saat user login, formulir **Minta Penawaran** terisi otomatis dari profil (nama, email, telepon, alamat) dan masih bisa diubah per pesanan.
 - Dashboard admin → **Akun pengguna** (`admin/pengguna.php`): admin hanya melihat nama, email, dan telepon. Alamat dan hash password tidak pernah dikirim ke halaman itu.

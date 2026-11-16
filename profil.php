@@ -83,6 +83,11 @@ include __DIR__ . '/includes/header.php';
             <?php if (isset($errors['_umum'])): ?>
                 <p class="galat galat-umum" role="alert"><?= e($errors['_umum']) ?></p>
             <?php endif; ?>
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" maxlength="20" autocomplete="username" autocapitalize="none" spellcheck="false" required value="<?= $val('username') ?>"<?= $aria($errors, 'username') ?>>
+                <?= $err($errors, 'username') ?>
+            </div>
             <div class="baris">
                 <div class="field">
                     <label for="nama">Nama</label>

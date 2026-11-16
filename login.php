@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Admin: username + password dari config.php. Semua perbandingan dijalankan agar waktunya seragam.
         $adminOk = hash_equals(ADMIN_USER, $id) & hash_equals(ADMIN_PASS, $pass);
 
-        // User: email + password. Hash tiruan dipakai bila email tidak ada, supaya waktu respons tetap mirip.
-        $akunUser = $id !== '' ? user_cari_email(users_baca(), $id) : null;
+        // User: username (atau email) + password. Hash tiruan dipakai bila email tidak ada, supaya waktu respons tetap mirip.
+        $akunUser = $id !== '' ? user_cari_masuk(users_baca(), $id) : null;
         $hashUji  = $akunUser['password_hash'] ?? '$2y$10$euFGu0oUd5XFVmvbj0KRVO.I4Zh8r4C935/GFIePurGvw95Jj.mjm';
         $userOk   = password_verify($pass, $hashUji) && $akunUser !== null;
 
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['gagal_login_sampai'] = time() + 60;
             $_SESSION['gagal_login'] = 0;
         }
-        $galat = 'Email/username atau password salah.';
+        $galat = 'Username atau password salah.';
     }
 }
 
@@ -71,7 +71,7 @@ include __DIR__ . '/includes/header.php';
     <div class="wrap akun-kotak">
         <p class="eyebrow eyebrow-lime">Akun</p>
         <h1 class="judul">Masuk ke Inkra.</h1>
-        <p class="form-ket">Login agar data pesanan terisi otomatis. Admin juga masuk lewat sini.</p>
+        <p class="form-ket">Login dengan username Anda agar data pesanan terisi otomatis. Admin juga masuk lewat sini.</p>
 
         <form class="form" method="post" novalidate>
             <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
@@ -80,7 +80,7 @@ include __DIR__ . '/includes/header.php';
                 <p class="galat galat-umum" role="alert"><?= e($galat) ?></p>
             <?php endif; ?>
             <div class="field">
-                <label for="identitas">Email (atau username admin)</label>
+                <label for="identitas">Username (atau email)</label>
                 <input id="identitas" name="identitas" type="text" maxlength="150" autocomplete="username" required autofocus value="<?= e($id) ?>">
             </div>
             <div class="field">
