@@ -51,6 +51,7 @@
             'Produk: ' + v('produk'),
             'Jumlah: ' + v('jumlah')
         ];
+        if (v('telepon')) { baris.push('Nomor WhatsApp: ' + v('telepon')); }
         if (v('target')) { baris.push('Target selesai: ' + v('target')); }
         if (v('rencana')) { baris.push('Rencana: ' + v('rencana').slice(0, 1000)); }
         if (v('alamat')) { baris.push('Alamat: ' + v('alamat').slice(0, 500)); }
@@ -99,7 +100,7 @@
         var nilai = input.value.trim();
         var pesan = '';
         if (nilai === '') {
-            pesan = pesanKosong[nama];
+            if (pesanKosong[nama]) { pesan = pesanKosong[nama]; }
         }
         tampilkanGalat(input, pesan);
         return pesan === '';

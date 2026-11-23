@@ -38,6 +38,12 @@ $aria   = fn(string $k): string => isset($errors[$k]) ? ' aria-invalid="true" ar
             </div>
 
             <div class="field">
+                <label for="telepon">Nomor WhatsApp (opsional)</label>
+                <input id="telepon" name="telepon" type="tel" inputmode="tel" maxlength="25" placeholder="0852-1793-0056" autocomplete="tel" value="<?= $val('telepon') ?>"<?= $aria('telepon') ?>>
+                <?= $err('telepon') ?>
+            </div>
+
+            <div class="field">
                 <label for="produk">Apa yang ingin Anda sablon?</label>
                 <input id="produk" name="produk" type="text" maxlength="150" placeholder="Kaos, jaket, totebag, atau produk lainnya" required value="<?= $val('produk') ?>"<?= $aria('produk') ?>>
                 <?= $err('produk') ?>
@@ -68,7 +74,7 @@ $aria   = fn(string $k): string => isset($errors[$k]) ? ' aria-invalid="true" ar
             <button class="btn btn-lime btn-blok" type="submit"><span>Minta Penawaran</span><?= ikon_panah() ?></button>
             <p class="form-catatan">Detail desain bisa dibahas saat konsultasi penawaran.</p>
             <?php if (user_masuk()): ?>
-                <p class="form-catatan">Nama dan alamat terisi dari <a class="tautan-garis" href="profil.php">profil Anda</a>. Boleh diubah untuk pesanan ini.</p>
+                <p class="form-catatan">Nama, nomor WhatsApp, dan alamat terisi dari <a class="tautan-garis" href="profil.php">profil Anda</a>. Boleh diubah untuk pesanan ini.</p>
             <?php elseif (!admin_masuk()): ?>
                 <p class="form-catatan">Anda masuk sebagai guest. <a class="tautan-garis" href="login.php?next=<?= e(rawurlencode($asal === 'index' ? 'index.php' : 'minta-penawaran.php')) ?>">Login</a> agar data terisi otomatis.</p>
             <?php endif; ?>

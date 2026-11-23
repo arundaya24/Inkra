@@ -33,6 +33,7 @@ function pesan_wa(array $d): string
         'Produk: ' . $d['produk'],
         'Jumlah: ' . $d['jumlah'],
     ];
+    if ($d['telepon'] !== '') { $baris[] = 'Nomor WhatsApp: ' . $d['telepon']; }
     if ($d['target'] !== '')  { $baris[] = 'Target selesai: ' . $d['target']; }
     if ($d['rencana'] !== '') { $baris[] = 'Rencana: ' . mb_strimwidth($d['rencana'], 0, 1000, '…'); }
     if ($d['alamat'] !== '')  { $baris[] = 'Alamat: ' . mb_strimwidth($d['alamat'], 0, 500, '…'); }
@@ -41,6 +42,7 @@ function pesan_wa(array $d): string
 
 $data = [
     'nama'    => bersih('nama', 100),
+    'telepon' => bersih('telepon', 25),
     'produk'  => bersih('produk', 150),
     'jumlah'  => bersih('jumlah', 50),
     'target'  => bersih('target', 100),
@@ -68,6 +70,7 @@ if (!$errors && isset($_SESSION['terakhir_kirim']) && time() - $_SESSION['terakh
 
 if (!$errors) {
     if ($data['nama'] === '')   { $errors['nama']   = 'Nama wajib diisi.'; }
+    if ($data['telepon'] !== '' && normalisasi_telepon($data['telepon']) === null) { $errors['telepon'] = 'Nomor WhatsApp tidak valid. Contoh: 0852-1793-0056.'; }
     if ($data['produk'] === '') { $errors['produk'] = 'Sebutkan produk yang ingin disablon.'; }
     if ($data['jumlah'] === '') { $errors['jumlah'] = 'Isi perkiraan jumlah.'; }
 }
