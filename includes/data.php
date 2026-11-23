@@ -17,7 +17,6 @@ $langkah = [
     ['Pengiriman (opsional)', 'Sablon sudah jadi dan akan dikirim ke alamatmu jika kamu memilih untuk dikirim.'],
 ];
 
-// Jawaban boleh berisi HTML sederhana (konten statis dari kode, bukan input pengguna).
 $faq = [
     ['Produk apa saja yang bisa disablon?',
      'Mulai dari kaos, jaket, hingga totebag. Untuk produk lainnya, sertakan detailnya saat meminta penawaran.'],

@@ -12,13 +12,11 @@ const ALAMAT      = 'Komplek Cileungsi Indah, Cileungsi, Kec. Cileungsi, Bogor, 
 const KONTAK_NAMA = 'Anggra';             // nama bawaan; admin bisa menggantinya dari dashboard
 const EMAIL_ADMIN = '';                 // isi untuk menerima notifikasi email (opsional)
 
-// Akun dashboard admin. Ganti password ini sebelum situs dipasang online.
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'admin123';
 
 const FILE_PENGATURAN = __DIR__ . '/data/pengaturan.json';
 
-/* ---------- Umum ---------- */
 
 function e(?string $teks): string
 {
@@ -38,7 +36,6 @@ function csrf_valid(): bool
     return hash_equals($_SESSION['csrf'] ?? '', (string) ($_POST['csrf'] ?? ''));
 }
 
-/** Ambil lalu hapus data flash dari session. */
 function flash(string $kunci, $default = null)
 {
     $nilai = $_SESSION[$kunci] ?? $default;
@@ -46,7 +43,6 @@ function flash(string $kunci, $default = null)
     return $nilai;
 }
 
-/* ---------- Pengaturan yang bisa diubah admin ---------- */
 
 function pengaturan_bawaan(): array
 {

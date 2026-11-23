@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     kembali($tujuan);
 }
 
-// Bersihkan input: potong spasi, buang karakter kontrol, batasi panjang.
 function bersih(string $kunci, int $maks): string
 {
     $nilai = trim((string) ($_POST[$kunci] ?? ''));
@@ -23,7 +22,6 @@ function bersih(string $kunci, int $maks): string
     return mb_substr($nilai, 0, $maks);
 }
 
-// Susun teks pesan WhatsApp dari isi formulir.
 function pesan_wa(array $d): string
 {
     $baris = [
@@ -52,18 +50,15 @@ $data = [
 
 $errors = [];
 
-// Token CSRF
 if (!hash_equals($_SESSION['csrf'] ?? '', (string) ($_POST['csrf'] ?? ''))) {
     $errors['_umum'] = 'Sesi formulir kedaluwarsa. Muat ulang halaman lalu kirim lagi.';
 }
 
-// Honeypot: bot biasanya mengisi kolom tersembunyi ini. Pura-pura sukses.
 if (($_POST['situs'] ?? '') !== '') {
     $_SESSION['sukses'] = true;
     kembali($tujuan);
 }
 
-// Batasi kecepatan kirim (5 detik per sesi)
 if (!$errors && isset($_SESSION['terakhir_kirim']) && time() - $_SESSION['terakhir_kirim'] < 5) {
     $errors['_umum'] = 'Terlalu cepat. Tunggu sebentar lalu kirim lagi.';
 }
@@ -81,7 +76,6 @@ if ($errors) {
     kembali($tujuan);
 }
 
-// Simpan satu baris JSON per permintaan ke data/permintaan.jsonl
 $baris = json_encode(
     ['waktu' => date('c'), 'ip' => $_SERVER['REMOTE_ADDR'] ?? '', 'user_id' => $_SESSION['user_id'] ?? null] + $data,
     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
