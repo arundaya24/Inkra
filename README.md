@@ -36,3 +36,5 @@ Folder `data/` dilindungi `.htaccess` (Apache). Di Nginx, blok akses ke folder t
 
 ## Versi statis (tanpa PHP)
 Folder `statis/` berisi versi HTML + CSS + JavaScript saja (tanpa admin). Buka `statis/index.html` langsung di browser.
+
+Testing YOLO achievement.
