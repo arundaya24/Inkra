@@ -31,23 +31,10 @@ $aria   = fn(string $k): string => isset($errors[$k]) ? ' aria-invalid="true" ar
                 <p class="galat galat-umum" role="alert"><?= e($errors['_umum']) ?></p>
             <?php endif; ?>
 
-            <div class="baris">
-                <div class="field">
-                    <label for="nama">Nama Anda</label>
-                    <input id="nama" name="nama" type="text" maxlength="100" placeholder="Nama lengkap" autocomplete="name" required value="<?= $val('nama') ?>"<?= $aria('nama') ?>>
-                    <?= $err('nama') ?>
-                </div>
-                <div class="field">
-                    <label for="email">Alamat email</label>
-                    <input id="email" name="email" type="email" maxlength="150" placeholder="nama@email.com" autocomplete="email" required value="<?= $val('email') ?>"<?= $aria('email') ?>>
-                    <?= $err('email') ?>
-                </div>
-            </div>
-
             <div class="field">
-                <label for="telepon">Nomor telepon (opsional)</label>
-                <input id="telepon" name="telepon" type="tel" inputmode="tel" maxlength="25" placeholder="0852-1793-0056" autocomplete="tel" value="<?= $val('telepon') ?>"<?= $aria('telepon') ?>>
-                <?= $err('telepon') ?>
+                <label for="nama">Nama Anda</label>
+                <input id="nama" name="nama" type="text" maxlength="100" placeholder="Nama lengkap" autocomplete="name" required value="<?= $val('nama') ?>"<?= $aria('nama') ?>>
+                <?= $err('nama') ?>
             </div>
 
             <div class="field">
@@ -81,7 +68,7 @@ $aria   = fn(string $k): string => isset($errors[$k]) ? ' aria-invalid="true" ar
             <button class="btn btn-lime btn-blok" type="submit"><span>Minta Penawaran</span><?= ikon_panah() ?></button>
             <p class="form-catatan">Detail desain bisa dibahas saat konsultasi penawaran.</p>
             <?php if (user_masuk()): ?>
-                <p class="form-catatan">Nama, email, telepon, dan alamat terisi dari <a class="tautan-garis" href="profil.php">profil Anda</a>. Boleh diubah untuk pesanan ini.</p>
+                <p class="form-catatan">Nama dan alamat terisi dari <a class="tautan-garis" href="profil.php">profil Anda</a>. Boleh diubah untuk pesanan ini.</p>
             <?php elseif (!admin_masuk()): ?>
                 <p class="form-catatan">Anda masuk sebagai guest. <a class="tautan-garis" href="login.php?next=<?= e(rawurlencode($asal === 'index' ? 'index.php' : 'minta-penawaran.php')) ?>">Login</a> agar data terisi otomatis.</p>
             <?php endif; ?>

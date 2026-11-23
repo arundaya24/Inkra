@@ -48,7 +48,6 @@
             'Halo Inkra, saya ingin minta penawaran sablon.',
             '',
             'Nama: ' + v('nama'),
-            'Email: ' + v('email'),
             'Produk: ' + v('produk'),
             'Jumlah: ' + v('jumlah')
         ];
@@ -68,11 +67,9 @@
         form.elements.produk.value = produkDariUrl.slice(0, 150);
     }
 
-    var POLA_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    var wajib = ['nama', 'email', 'produk', 'jumlah'];
+    var wajib = ['nama', 'produk', 'jumlah'];
     var pesanKosong = {
         nama: 'Nama wajib diisi.',
-        email: 'Email wajib diisi.',
         produk: 'Sebutkan produk yang ingin disablon.',
         jumlah: 'Isi perkiraan jumlah.'
     };
@@ -103,8 +100,6 @@
         var pesan = '';
         if (nilai === '') {
             pesan = pesanKosong[nama];
-        } else if (nama === 'email' && !POLA_EMAIL.test(nilai)) {
-            pesan = 'Format email belum benar.';
         }
         tampilkanGalat(input, pesan);
         return pesan === '';

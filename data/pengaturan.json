@@ -2,11 +2,14 @@
     "nama": "Anggra",
     "telepon": "6285217930056",
     "carousel": [
-        "assets/img/hero.jpg"
+        "assets/img/hero.jpg",
+        "uploads/a4523a34a78b8fd128f3cb8e69328e1c.jpg",
+        "uploads/3caa9415fccf84458f70ac6e0c554f00.jpg",
+        "uploads/39af018a528fc00b8aa3074019094a05.jpg"
     ],
     "media": {
-        "Kaos": "assets/img/kaos.jpg",
+        "Kaos": "uploads/24e1e8576953091f2e2a49457d1eb096.jpg",
         "Jaket": "assets/img/jaket.jpg",
-        "Totebag": "assets/img/totebag.jpg"
+        "Totebag": "uploads/c6adb1cb6991e66a114988a07f00b3a5.jpg"
     }
 }

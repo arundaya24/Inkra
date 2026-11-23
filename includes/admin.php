@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-/** Simpan gambar unggahan ke folder uploads/ dan kembalikan path relatifnya. */
 function simpan_unggahan(array $berkas): string
 {
     if (!isset($berkas['error']) || is_array($berkas['error'])) {

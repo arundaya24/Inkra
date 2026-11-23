@@ -30,11 +30,9 @@ function pesan_wa(array $d): string
         'Halo Inkra, saya ingin minta penawaran sablon.',
         '',
         'Nama: ' . $d['nama'],
-        'Email: ' . $d['email'],
         'Produk: ' . $d['produk'],
         'Jumlah: ' . $d['jumlah'],
     ];
-    if ($d['telepon'] !== '') { $baris[] = 'Telepon: ' . $d['telepon']; }
     if ($d['target'] !== '')  { $baris[] = 'Target selesai: ' . $d['target']; }
     if ($d['rencana'] !== '') { $baris[] = 'Rencana: ' . mb_strimwidth($d['rencana'], 0, 1000, '…'); }
     if ($d['alamat'] !== '')  { $baris[] = 'Alamat: ' . mb_strimwidth($d['alamat'], 0, 500, '…'); }
@@ -43,8 +41,6 @@ function pesan_wa(array $d): string
 
 $data = [
     'nama'    => bersih('nama', 100),
-    'email'   => bersih('email', 150),
-    'telepon' => bersih('telepon', 25),
     'produk'  => bersih('produk', 150),
     'jumlah'  => bersih('jumlah', 50),
     'target'  => bersih('target', 100),
@@ -72,9 +68,6 @@ if (!$errors && isset($_SESSION['terakhir_kirim']) && time() - $_SESSION['terakh
 
 if (!$errors) {
     if ($data['nama'] === '')   { $errors['nama']   = 'Nama wajib diisi.'; }
-    if ($data['email'] === '')  { $errors['email']  = 'Email wajib diisi.'; }
-    elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) { $errors['email'] = 'Format email belum benar.'; }
-    if ($data['telepon'] !== '' && normalisasi_telepon($data['telepon']) === null) { $errors['telepon'] = 'Nomor telepon tidak valid. Contoh: 0852-1793-0056.'; }
     if ($data['produk'] === '') { $errors['produk'] = 'Sebutkan produk yang ingin disablon.'; }
     if ($data['jumlah'] === '') { $errors['jumlah'] = 'Isi perkiraan jumlah.'; }
 }
@@ -96,19 +89,6 @@ if ($tersimpan === false) {
     $_SESSION['errors'] = ['_umum' => 'Permintaan belum bisa disimpan. Coba lagi atau hubungi kami lewat WhatsApp.'];
     $_SESSION['old']    = $data;
     kembali($tujuan);
-}
-
-// Notifikasi email (opsional, aktif jika EMAIL_ADMIN diisi di config.php)
-if (EMAIL_ADMIN !== '') {
-    $isi = '';
-    foreach ($data as $k => $v) {
-        $isi .= ucfirst($k) . ': ' . $v . "\n";
-    }
-    $subjek = '=?UTF-8?B?' . base64_encode('Permintaan penawaran baru dari ' . $data['nama']) . '?=';
-    @mail(EMAIL_ADMIN, $subjek, $isi, [
-        'Content-Type' => 'text/plain; charset=UTF-8',
-        'Reply-To'     => str_replace(["\r", "\n"], '', $data['email']),
-    ]);
 }
 
 $_SESSION['terakhir_kirim'] = time();
